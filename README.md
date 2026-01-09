@@ -1,0 +1,2 @@
+# Baidu_EdgeBoardLite_FZ3B_Vivado_Reference
+这是一个将用在智能车比赛的推理模块作为ZU3EG开发板使用的工程，不定期更新例程，同时提供一些官方资料
