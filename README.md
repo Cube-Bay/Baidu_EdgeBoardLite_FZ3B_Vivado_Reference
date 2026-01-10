@@ -18,6 +18,6 @@ Vivado版本为21.2
 - 在板子上有一个miniUSB的串口接口，用于观察打印日志，关于该串口有两点要注意：
     - 首先是该串口使用的USB转串口芯片是CP2102，如果之前没有使用过这个芯片首次使用时需要安装[驱动](https://micoair.cn/docs/CP2102-qu-dong-an-zhuang-jiao-cheng-Windows)：
     ![USB转串口示意图](/README图片素材/USB转串口示意图.png)
-    - 从硬件介绍文件可以知道，这个串口实际上接的是PS的UART1，如果同时开了UART0和UART1的话，在Vitis开发中默认printf/xilprintf函数重定向的是UART0，为了使这个串口可以正常使用，我们需要在Vitis中做如下更改（如果是FreeRTOS则在Overview下面显示的是freertos）：
+    - 从硬件介绍文件可以知道，这个串口实际上接的是PS的UART1（~~什么，你问UART0去哪了，UART0其实被BT1120排线接口引出来了~~），如果同时开了UART0和UART1的话，在Vitis开发中默认printf/xilprintf函数重定向的是UART0，为了使这个串口可以正常使用，我们需要在Vitis中做如下更改（如果是FreeRTOS则在Overview下面显示的是freertos）：
     ![串口重定向](/README图片素材/Vitis串口重定向.png)
 
