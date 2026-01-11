@@ -22,8 +22,7 @@ FZ3有两个版本，区别在于内存的容量和位宽上，FZ3A一共2GB大�
     ![USB转串口示意图](/README图片素材/USB转串口示意图.png)
     - 从硬件介绍文件可以知道，这个串口实际上接的是PS的UART1（什么？你问UART0去哪了，UART0其实被BT1120排线接口引出来了），如果同时开了UART0和UART1的话，在Vitis开发中默认printf/xilprintf函数重定向的是UART0，为了使这个串口可以正常使用，我们需要在Vitis中做如下更改，stdin和stdout最好都改一下（如果是FreeRTOS则在Overview下面显示的是freertos）：
     ![串口重定向](/README图片素材/Vitis串口重定向.png)
-    这一项改好之后你的程序再调用打印函数就会重定向到UART1了，但是刚上电的FSBL输出内容仍然重定向为UART0，如果你想看FSBL打印的内容的话（~~不跑Linux应该不会有人想看吧~~）需要在system_wrapper这个界面的zynqmp_fsbl的同样位置修改重定向的串口
-    在裸机和FreeRTOS下，FSBL的输出内容就是启动时最先打出来的几句话（时间、日期、版本号根据你实际操作的情况为主）：
+    这一项改好之后你的程序再调用打印函数就会重定向到UART1了，但是刚上电的FSBL输出内容仍然重定向为UART0，如果你想看FSBL打印的内容的话（~~不跑Linux应该不会有人想看吧~~）需要在system_wrapper这个界面的zynqmp_fsbl的同样位置修改重定向的串口，在裸机和FreeRTOS下，FSBL的输出内容就是启动时最先打出来的几句话（时间、日期、版本号根据你实际操作的情况为主）：
         >Xilinx Zynq MP First Stage Boot Loader 
         >
         >Release 2021.2   Jan 11 2026  -  19:09:10
