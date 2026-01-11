@@ -15,16 +15,21 @@ FZ3有两个版本，区别在于内存的容量和位宽上，FZ3A一共2GB大�
 
 剩下的就是一些小缺点了，比如什么没有PL的DDR（这个确实有点强人所难了）、预留IO接口不是间距2.54规格、以及串口的接口是miniUSB这种古老接口（也许2019年type-C并没有那么普及）等等，但话又说回来了，作为一个700￥左右有详细资料的ZU3 MPSoC开发板，这还能要什么自行车（~~炸了也要夸他响~~
 ## 首次使用注意事项
-- 从硬件介绍手册中可以知道，FZ3B支持JTAG、SD卡、EMMC、Flash四种启动方式，启动模式的切换依靠模式选择的拨码开关实现，在硬件手册中拨码的顺序表格从左到右是**4、3、2、1**，而实际拨码开关从左到右的顺序是**1、2、3、4**，拨的时候要格外注意顺序（~~黑金你写手册的时候把顺序正过来很难吗~~）：
+- 从硬件介绍手册中可以知道，FZ3B支持`JTAG`、`SD卡`、`EMMC`、`Flash`四种启动方式，启动模式的切换依靠模式选择的拨码开关实现，在硬件手册中拨码的顺序表格从左到右是**4、3、2、1**，而实际拨码开关从左到右的顺序是**1、2、3、4**，拨的时候要格外注意顺序（~~黑金你写手册的时候把顺序正过来很难吗~~）：
 ![拨码顺序](/README图片素材/拨码顺序.png)
 - 在板子上有一个miniUSB的串口接口，用于观察打印日志，关于该串口有两点要注意：
-    - 首先是该串口使用的USB转串口芯片是CP2102，如果之前没有使用过这个芯片首次使用时需要安装[驱动](https://micoair.cn/docs/CP2102-qu-dong-an-zhuang-jiao-cheng-Windows)：
+    - 首先是该串口使用的USB转串口芯片是`CP2102`，如果之前没有使用过这个芯片首次使用时需要安装[驱动](https://micoair.cn/docs/CP2102-qu-dong-an-zhuang-jiao-cheng-Windows)：
     ![USB转串口示意图](/README图片素材/USB转串口示意图.png)
-    - 从硬件介绍文件可以知道，这个串口实际上接的是PS的UART1（什么？你问UART0去哪了，UART0其实被BT1120排线接口引出来了），如果同时开了UART0和UART1的话，在Vitis开发中默认printf/xilprintf函数重定向的是UART0，为了使这个串口可以正常使用，我们需要在Vitis中做如下更改，stdin和stdout最好都改一下（如果是FreeRTOS则在Overview下面显示的是freertos）：
+    - 从硬件介绍文件可以知道，这个串口实际上接的是PS的UART1（什么？你问UART0去哪了，UART0其实被BT1120排线接口引出来了），如果同时开了UART0和UART1的话，在Vitis开发中默认`printf/xilprintf`函数重定向的是UART0，为了使这个串口可以正常使用，我们需要在Vitis中做如下更改，`stdin`和`stdout`最好都改一下（如果是FreeRTOS则在Overview下面显示的是freertos）：
     ![串口重定向](/README图片素材/Vitis串口重定向.png)
-    这一项改好之后你的程序再调用打印函数就会重定向到UART1了，但是刚上电的FSBL输出内容仍然重定向为UART0，如果你想看FSBL打印的内容的话（~~不跑Linux应该不会有人想看吧~~）需要在system_wrapper这个界面的zynqmp_fsbl的同样位置修改重定向的串口，在裸机和FreeRTOS下，FSBL的输出内容就是启动时最先打出来的几句话（时间、日期、版本号根据你实际操作的情况为主）：
+    这一项改好之后你的程序再调用打印函数就会重定向到UART1了，但是刚上电的FSBL输出内容仍然重定向为UART0，如果你想看FSBL打印的内容的话（~~不跑Linux应该不会有人想看吧~~）需要在`system_wrapper`这个界面的`zynqmp_fsbl`的同样位置修改重定向的串口，在裸机和FreeRTOS下，FSBL的输出内容就是启动时最先打出来的几句话（时间、日期、版本号根据你实际操作的情况为主）：
         >Xilinx Zynq MP First Stage Boot Loader 
         >
         >Release 2021.2   Jan 11 2026  -  19:09:10
         >
         >PMU-FW is not running, certain applications may not be supported.
+## 工程使用方法与注意事项
+- Vivado工程都是使用Block Design实现的，BD以TCL脚本的形式提供，使用时先将约束与模块文件加入工程（如果有的话），然后再[利用TCL重构Block Design](https://blog.csdn.net/lzr232/article/details/143187267)
+- Vitis工程只提供必要的源文件，因为21版Vitis工程移植操作复杂，改环境还容易出奇怪bug，在本地重新建立一个Vitis然后添加源文件比较稳妥
+- 如果只是想跳过繁琐的DDR配置，获得一个能够烧进程序的版本，可以使用UART工程中的`minimum_system.tcl`，这个版本仅仅配置了DDR，打开了UART0串口，除此之外没有任何其他模块
+- 强烈建议使用工程的时候阅读一下目录里面的`README`，里面有一些注意事项与操作流程
