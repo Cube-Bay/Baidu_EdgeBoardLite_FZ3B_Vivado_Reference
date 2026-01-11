@@ -27,4 +27,5 @@ FZ3有两个版本，区别在于内存的容量和位宽上，FZ3A一共2GB大�
         >Xilinx Zynq MP First Stage Boot Loader 
         >
         >Release 2021.2   Jan 11 2026  -  19:09:10
+        >
         >PMU-FW is not running, certain applications may not be supported.
