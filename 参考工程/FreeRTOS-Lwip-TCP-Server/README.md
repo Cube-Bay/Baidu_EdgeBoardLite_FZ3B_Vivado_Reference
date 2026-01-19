@@ -6,7 +6,7 @@
 
 Lwip有三种不同的[开发方式](https://www.cnblogs.com/The-explosion/p/13582525.html)，在Vitis中支持裸机的RAW API和操作系统的Socket API，其中Socket API使用最为简单，但是代价是在Vitis中要使用FreeRTOS操作系统，不熟悉这个的话可以先看下[这个](https://gitee.com/xrbin/FreeRTOS_learning/tree/master/FreeRTOS10.4.6/01-%E7%AC%94%E8%AE%B0)，只看前几个基础知识就可以；
 
-例程使用了AI生成，然后我进行了整理和精简，确保能跑起来，不了解流程的话可以问问AI（~~dicksuck，启动！~~
+例程使用了AI生成，然后我进行了整理和精简，添加了客户端断连的处理办法，让服务器可以重新监听，不了解流程的话可以扔给AI问问（~~dicksuck，启动！~~
 ## 注意事项
 在Vitis中Lwip是作为一种第三方库被加载进来的，这就意味着如果你创建的工程是Hello World模板，想使用Lwip就需要手动在`platform.spr`文件中勾选`lwip211`，不过就我个人而言不是很推荐这个做法，因为Lwip中有很多设置选项，比如`pbuf_pool_size`、`tcp_wnd`等参数，通过勾选加入Lwip的话，这些参数与默认参数一致，而默认的参数在传输数据比较大的时候Lwip就会卡死（~~然后疯狂找代码问题死活找不出来~~
 
